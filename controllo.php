@@ -15,14 +15,13 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (count($_POST) > 2) {
-            if ($_POST['inlineRadioOptions'] = "Femmina") {
-                $_POST['inlineRadioOptions'] = 1;
-            } else {
-                $_POST['inlineRadioOptions'] = 0;
-            }
-            $sql = 'INSERT INTO user(Cognome, Nome, Email, Password, Telefono, Indirizzo, Sesso) VALUES(' . '\'' . $_POST['cognome'] . '\'' . ',' . '\'' . $_POST['nome'] . '\'' . ',' . '\'' . $_POST['email'] . '\'' . ',' . '\'' . $_POST['password'] . '\'' . ',' . '\'' . $_POST['ntel'] . '\'' . ',' . '\'' . $_POST['ind'] . '\'' . ',' . '\'' . $_POST['inlineRadioOptions'] . '\'' . ')';
+        if (sizeof($_POST) > 2) {
+
+            
+            $sql = "INSERT INTO user(Cognome, Nome, Email, Password, Telefono, Indirizzo, Sesso) VALUES( '" . str_replace("'","''",$_POST['cognome'])."','" . str_replace("'","''",$_POST['nome']) ."','" . $_POST['email'] . "','" . $_POST['password'] . "','". $_POST['ntel'] . "','". str_replace("'","''",$_POST['ind']) ."','". $_POST['genere'] . '\'' . ')';
+            
             if ($conn->query($sql) === TRUE) {
+          
                 $iduser = $conn->insert_id;
             } else {
                 die("Error: " . $sql . "<br>" . $conn->error);
@@ -35,56 +34,71 @@
             if ($result->num_rows === 1) {
                 $iduser = $result->fetch_object()->ID;
             } else {
-                die("credenziali non corrette");
-                //header("Location: https://localhost/php/login.php");
+                header("Location: https://localhost/php/login.php");
             }
+        }
+    } else if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        if (isset($_GET['iduser'])) {
+            $iduser = $_GET['iduser'];
+        } else {
+            header("Location: https://localhost/php/login.php");
         }
     } else {
         header("Location: https://localhost/php/login.php");
     }
     ?>
-
-    <table class="table">
-        <tr>
-            <th>ID</th>
-            <th>ORDINE</th>
-            <th>NOME</th>
-            <th>COGNOME</th>
-            <th>INDIRIZZO</th>
-        </tr>
-        <br><a href="https://localhost/php/ordini.php?iduser=<?=$iduser;?>"><button type="button" class="btn btn-danger">EFFETTUA UN NUOVO ORDINE</button></a>
-        <?php
-        if ($iduser !== 0) {
-            $sql = "SELECT Nome, Cognome, Indirizzo, ordine.ID, ordine.Ordine from user join ordine on user.ID = ordine.IDUtente where IDUtente = $iduser";
-            //Echo "<textarea>".$sql."</textarea>";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                // output data of each row
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["ID"] . "</td>" . "<td>" . $row["Ordine"] . "</td>" . "<td>" . $row["Nome"] . "</td>" . "<td>" . $row["Cognome"] . "</td>" . "<td>" . $row["Indirizzo"] . "</td>";
-                    echo "</tr>";
+    <center>
+        <table class="table">
+            <tr>
+                <?php
+                $info = array(
+                    array('user', 'Nome'),
+                    array('user', 'Cognome'),
+                    array('user', 'Indirizzo'),
+                    array('ordine', 'Ordine'),
+                    array('ordine', 'ID'),
+                    array('user', 'Telefono')
+                );
+                $imp = [];
+                for ($c = 0; $c < sizeof($info); $c++) {
+                    $imp[$c] = implode(".", $info[$c]);
                 }
-            } else {
-        ?>
-                <tr>
-                    <td colspan="5">0 results</td>
-                </tr>
-        <?php
-
-            }
-        }
-
-        $conn->close();
-        ?>
-      
-       
+                $sql = "SELECT " . implode(", ", $imp) . " from user join ordine on user.ID = ordine.IDUtente where IDUtente = $iduser";
 
 
+                for ($c = 0; $c < sizeof($info); $c++) {
+                    echo "<th>" . $info[$c][1] . "</th>";
+                }
+                echo "</tr>";
+                $n = 0;
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        for ($c = 0; $c < sizeof($info); $c++) {
+
+                            echo "<td>" . $row[$info[$c][1]] . "</td>";
+                        }
+                        $n = $n + 1;
+                        echo "</tr>";
+                    }
+                }
+                ?>
+                <br><a href="https://localhost/php/ordini.php?iduser=<?= $iduser; ?>"><button type="button" class="btn btn-danger">EFFETTUA UN NUOVO ORDINE</button></a>
+
+            <tr>
+                <td colspan="<?php echo sizeof($info); ?>"><?php echo $result->num_rows; ?> results</td>
+            </tr>
+            <?php
+            $conn->close();
+            ?>
 
 
 
 
+
+            </tr>
+        </table>
+    </center>
 </body>
-
-</table>
