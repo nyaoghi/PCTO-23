@@ -5,7 +5,7 @@
 <body class="m-5 p-5">
     <center>
         <h1>Il tuo ordine</h1>
-        <form class="row g-2 needs-validation" method="post" action="ordini.php" novalidate>
+        <form class="row g-2 needs-validation" method="post" action="nuovoordine.php" novalidate>
             <input type="hidden" name="iduser" value="<?=$_GET['iduser'];?>">
            
             <div class="col-md-4">
@@ -22,24 +22,9 @@
                     <input type=text name="ordine" class="form-control" id="validationCustom01" required />
                 </div>
             </div>
+            <button type="submit" class="btn btn-danger">EFFETTUA UN NUOVO ORDINE</button>
         </form>
-        <button type="submit" class="btn btn-danger">EFFETTUA UN NUOVO ORDINE</button>
-        <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "php";
-
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-
-    $sql = 'INSERT into ordine (Ordine) values ('.'\''.$_POST['ordine'].'\''.'where ID = '. $_GET['iduser'].')';
-    if ($conn->query($sql) == TRUE) {
-        echo "New record created successfully";
-      } 
-
-    ?>
+       
+       
     </center>
 </body>
