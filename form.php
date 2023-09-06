@@ -1,4 +1,3 @@
-
 <head>
   <title>Registrazione Utente</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -39,17 +38,17 @@
 			</div>
 			<div class="col-md-4">
 				<label for="validationCustom06" class="form-label">Indirizzo di casa</label>
-				<textarea name="ind" class="form-control" id="validationCustom06" required /></textarea>
+				<textarea name="ind" class="form-control" id="validationCustom06" required></textarea>
 			</div>
 		      <div align="center" class="form-check-inline">
 			  <br><p>Specifica il genere</p>
                 <div class="form-check mb-3 form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="validationFormCheck2"  id="inlineRadio1" value="Maschio" required>
+                    <input class="form-check-input" type="radio" name="genere" id="validationFormCheck2"  id="inlineRadio1" value="0" required>
                     <label class="form-check-label" for="inlineRadio1 validationFormCheck2" >Maschio (M)</label>
 					<div class="invalid-feedback">More example invalid feedback text</div>
                 </div>
                 <div class="form-check mb-3 form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="validationFormCheck3"  id="inlineRadio2" value="Femmina" required>
+                  <input class="form-check-input" type="radio" name="genere" id="validationFormCheck3"  id="inlineRadio2" value="1" required>
                   <label class="form-check-label" for="inlineRadio2 validationFormCheck3" >Femmina (F)</label>
 				  <div class="invalid-feedback">More example invalid feedback text</div>
                 </div>
